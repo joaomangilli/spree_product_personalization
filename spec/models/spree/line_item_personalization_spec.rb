@@ -55,7 +55,7 @@ describe Spree::LineItemPersonalization do
     end
   end
 
-  it 'has relation to product personalization', :focus do
+  it 'has relation to product personalization' do
     @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
     expect(@order.line_items.first.personalizations.first.product_personalization).to eq(@product_personalizations[0])
     expect(@order.line_items.first.personalizations.last.product_personalization).to eq(@product_personalizations[3])
