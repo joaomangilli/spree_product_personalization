@@ -53,7 +53,12 @@ describe Spree::LineItemPersonalization do
         expect(@line_item_personalization.valid?).to eq true
       end
     end
+  end
 
+  it 'has relation to product personalization', :focus do
+    @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
+    expect(@order.line_items.first.personalizations.first.product_personalization).to eq(@product_personalizations[0])
+    expect(@order.line_items.first.personalizations.last.product_personalization).to eq(@product_personalizations[3])
   end
 
   it "adds line_item with personalization to the order" do
@@ -67,6 +72,7 @@ describe Spree::LineItemPersonalization do
     expect(line_item.personalizations.first.value).to eq(@personalization_1[:value])
     expect(line_item.personalizations.first.name).to eq(@product_personalizations.first.name)
     expect(line_item.personalizations.first.price).to eq(@product_personalizations.first.calculator.preferred_amount)
+    expect(line_item.personalizations.first.spree_product_personalization_id).to eq(@product_personalizations.first.id)
   end
 
   it "adds line_item of variant that does not have personalization to the order" do
