@@ -45,6 +45,7 @@ module Spree
           relevant_product_personalization = product.personalization_with_name(line_item_personalization.name)
 
           if relevant_product_personalization
+            line_item_personalization.spree_product_personalization_id = relevant_product_personalization.id
             line_item_personalization.line_item = self
             line_item_personalization.limit = relevant_product_personalization.limit
 
@@ -86,6 +87,7 @@ module Spree
 
           personalization_attributes[:price] = calculator.preferred_amount
           personalization_attributes[:currency] = calculator.preferred_currency
+          personalization_attributes[:spree_product_personalization_id] = relevant_product_personalization.id
         end
       end
 
