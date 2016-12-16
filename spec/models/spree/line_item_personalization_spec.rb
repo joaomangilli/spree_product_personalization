@@ -61,6 +61,15 @@ describe Spree::LineItemPersonalization do
     expect(@order.line_items.first.personalizations.last.product_personalization).to eq(@product_personalizations[3])
   end
 
+  it 'has relation to option value product personalization' do
+    @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
+    personalization = @order.line_items.first.personalizations
+
+    expect(personalization.first.product_personalization).to eq(@product_personalizations[3])
+    expect(personalization.first.spree_option_value_product_personalization_id).to eq(@select_option_value_product_personalization.id)
+    expect(personalization.first.option_value_product_personalization).to eq(@select_option_value_product_personalization)
+  end
+
   it "adds line_item with personalization to the order" do
     original_count = @order.line_items.count
     line_item = @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
