@@ -6,12 +6,12 @@ describe Spree::ProductPersonalization do
   let(:attributes) do
     attrs = []
     count.times { attrs << {
-      name: generate(:personalization_name),
-      description: generate(:personalization_description),
-      required: [true, false].sample,
-      limit: rand(10...1000),
+      name:         generate(:personalization_name),
+      description:  generate(:personalization_description),
+      required:     [true, false].sample,
+      limit:        rand(10...1000),
       calculator_attributes: {
-        type: "Spree::Calculator::FlatRate",
+        type:             "Spree::Calculator::FlatRate",
         preferred_amount: Money.new(rand(100...500)).to_s
       }
     }}
@@ -20,7 +20,7 @@ describe Spree::ProductPersonalization do
   let(:options) do
     { personalizations_attributes: attributes }
   end
-  let(:params) { ActionController::Parameters.new(options).permit(:personalizations_attributes => Spree::ProductPersonalization.permitted_attributes) }
+  let(:params) { ActionController::Parameters.new(options).permit(personalizations_attributes: Spree::ProductPersonalization.permitted_attributes) }
 
   describe "Validations" do
     before do

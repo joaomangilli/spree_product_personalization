@@ -8,12 +8,12 @@ module Spree
   end
 
   LineItem.class_eval do
-    has_many :personalizations, class_name: "Spree::LineItemPersonalization", :dependent => :destroy
-    accepts_nested_attributes_for :personalizations, :allow_destroy => true
+    has_many :personalizations, class_name: "Spree::LineItemPersonalization", dependent: :destroy
+    accepts_nested_attributes_for :personalizations, allow_destroy: true
 
-    before_validation :copy_personalizations, :on => :create, :if => -> { self.personalizations.present? }
+    before_validation :copy_personalizations, on: :create, if: -> { self.personalizations.present? }
 
-    validate :ensure_required_personalizations, :on => :create
+    validate :ensure_required_personalizations, on: :create
 
 
     def personalizations_match_with?(other_line_item_or_personalizations_attributes)
@@ -32,9 +32,9 @@ module Spree
     private
 
     def ensure_required_personalizations
-      self.product.personalizations.select {|p| p.required}.each do |required_personalization|
-        unless self.personalizations.detect {|p| p.name == required_personalization.name}
-          errors.add("personalizations.missing", {required_personalization.name => Spree.t('errors.line_item_personalization_value_is_required', name: required_personalization.name)})
+      self.product.personalizations.select { |p| p.required }.each do |required_personalization|
+        unless self.personalizations.detect { |p| p.name == required_personalization.name }
+          errors.add("personalizations.missing", { required_personalization.name => Spree.t('errors.line_item_personalization_value_is_required', name: required_personalization.name) })
         end
       end
     end
@@ -51,7 +51,7 @@ module Spree
 
             if relevant_product_personalization.list?
               option_value_id = line_item_personalization.option_value_id
-              option_value_product_personalization = relevant_product_personalization.option_value_product_personalizations.find_by_option_value_id(option_value_id)
+              option_value_product_personalization = relevant_product_personalization.option_value_product_personalizations.find_by(option_value_id: option_value_id)
               calculator = option_value_product_personalization.try(:calculator)
             else
               calculator = relevant_product_personalization.calculator
@@ -77,9 +77,9 @@ module Spree
           if relevant_product_personalization.list?
             option_value_id = personalization_attributes[:option_value_id]
 
-            personalization_attributes[:value] = Spree::OptionValue.find_by_id(option_value_id).name
+            personalization_attributes[:value] = Spree::OptionValue.find_by(id: option_value_id).name
 
-            option_value_product_personalization = relevant_product_personalization.option_value_product_personalizations.find_by_option_value_id(option_value_id)
+            option_value_product_personalization = relevant_product_personalization.option_value_product_personalizations.find_by(option_value_id: option_value_id)
             calculator = option_value_product_personalization.try(:calculator)
           else
             calculator = relevant_product_personalization.calculator

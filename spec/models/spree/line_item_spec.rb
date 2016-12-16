@@ -22,7 +22,7 @@ describe Spree::LineItem do
 
   def get_params(personalization_attributes)
     options  = { personalizations_attributes: personalization_attributes }
-    ActionController::Parameters.new(options).permit(:personalizations_attributes => Spree::LineItemPersonalization.permitted_attributes)
+    ActionController::Parameters.new(options).permit(personalizations_attributes: Spree::LineItemPersonalization.permitted_attributes)
   end
 
   context "validation" do
