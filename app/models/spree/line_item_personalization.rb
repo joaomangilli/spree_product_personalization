@@ -1,6 +1,7 @@
 module Spree
   class LineItemPersonalization < ActiveRecord::Base
     belongs_to :line_item
+    belongs_to :product_personalization, class_name: "Spree::ProductPersonalization", foreign_key: "spree_product_personalization_id"
 
     validate :value_length
 
