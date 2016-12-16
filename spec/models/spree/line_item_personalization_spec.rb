@@ -55,6 +55,29 @@ describe Spree::LineItemPersonalization do
     end
   end
 
+
+  describe '#product_personalization_amount' do
+    it 'returns the related ProductPersonalization increase price' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
+      @product_personalizations[0].update(calculator: Spree::Calculator::FlatRate.new(preferred_amount: 78.54))
+      expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('78.54'))
+    end
+  end
+
+
+  describe '#has_option_value_personalizations?' do
+    it 'returns true if it has an OptionValueProductPersonalization' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
+      expect(@order.line_items.first.personalizations.first.has_option_value_personalizations?).to eq true
+    end
+
+    it 'returns false if is has no OptionValueProductPersonalization' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
+      expect(@order.line_items.first.personalizations.first.has_option_value_personalizations?).to eq false
+    end
+  end
+
+
   it 'has relation to product personalization' do
     @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
     expect(@order.line_items.first.personalizations.first.product_personalization).to eq(@product_personalizations[0])

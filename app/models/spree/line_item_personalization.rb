@@ -34,6 +34,15 @@ module Spree
       self.spree_option_value_product_personalization_id = ovpp.try(:id)
     end
 
+    def product_personalization_amount
+      product_personalization.increase_price
+    end
+
+    def has_option_value_personalizations?
+      !option_value_product_personalization.blank?
+    end
+
+
     private
 
     def value_length
