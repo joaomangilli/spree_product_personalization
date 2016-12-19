@@ -4,9 +4,9 @@ module Spree
 
     belongs_to :product_personalization, class_name: 'Spree::ProductPersonalization', inverse_of: :option_value_product_personalizations
     belongs_to :option_value, class_name: 'Spree::OptionValue', inverse_of: :option_value_product_personalizations
-  end
 
-  def product_personalization_amount
-    product_personalization.increase_price(position - 1)
+    def product_personalization_amount
+      product_personalization.increase_price(position - 1)
+    end
   end
 end
