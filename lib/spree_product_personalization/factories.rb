@@ -3,11 +3,11 @@ FactoryGirl.define do
   sequence(:personalization_name) { |n| "Personalization-#{n}" }
   sequence(:personalization_description) { |n| "Description-#{n}" }
 
-  factory :personalization_calculator, :class => Spree::Calculator::FlatRate do
+  factory :personalization_calculator, class: Spree::Calculator::FlatRate do
     preferred_amount { rand(1..100) }
   end
 
-  factory :product_personalization, :class => Spree::ProductPersonalization do
+  factory :product_personalization, class: Spree::ProductPersonalization do
     name { generate(:personalization_name) }
     description { generate(:personalization_description) }
     required false
@@ -29,7 +29,7 @@ FactoryGirl.define do
     end
   end
 
-  factory :option_value_product_personalization, :class => Spree::OptionValueProductPersonalization do
+  factory :option_value_product_personalization, class: Spree::OptionValueProductPersonalization do
     product_personalization
     option_value
     calculator { |p| p.association(:personalization_calculator) }

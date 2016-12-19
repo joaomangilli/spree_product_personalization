@@ -36,7 +36,7 @@ describe Spree::LineItemPersonalization do
         @line_item_personalization.value = ""
         @line_item_personalization.name = personalization_name
         expect(@line_item_personalization.valid?).to eq false
-        expect(@line_item_personalization.errors[:base].first).to eq({personalization_name => "#{personalization_name} is required"})
+        expect(@line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is required" })
 
         @line_item_personalization.value = "A"
         expect(@line_item_personalization.valid?).to eq true
@@ -47,7 +47,7 @@ describe Spree::LineItemPersonalization do
         @line_item_personalization.name = personalization_name
         @line_item_personalization.value = "A long value"
         expect(@line_item_personalization.valid?).to eq false
-        expect(@line_item_personalization.errors[:base].first).to eq({personalization_name => "#{personalization_name} is too long (maximum is 5 characters)"})
+        expect(@line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is too long (maximum is 5 characters)" })
 
         @line_item_personalization.value = "long"
         expect(@line_item_personalization.valid?).to eq true
