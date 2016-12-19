@@ -35,7 +35,11 @@ module Spree
     end
 
     def product_personalization_amount
-      product_personalization.increase_price
+      if has_option_value_personalizations?
+        option_value_product_personalization.product_personalization_amount
+      else
+        product_personalization.increase_price
+      end
     end
 
     def has_option_value_personalizations?
