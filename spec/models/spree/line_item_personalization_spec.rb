@@ -63,7 +63,7 @@ describe Spree::LineItemPersonalization do
       expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('78.54'))
     end
 
-    it 'returns the related OptionValueProductPersonalization increase price', :focus do
+    it 'returns the related OptionValueProductPersonalization increase price' do
       @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
       @order.line_items.first.personalizations.first.option_value_product_personalization.calculator.update(preferred_amount: 92.39)
       expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('92.39'))
