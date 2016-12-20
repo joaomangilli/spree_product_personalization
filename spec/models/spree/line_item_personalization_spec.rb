@@ -65,7 +65,11 @@ describe Spree::LineItemPersonalization do
 
     it 'returns the related OptionValueProductPersonalization increase price' do
       @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
-      @order.line_items.first.personalizations.first.option_value_product_personalization.calculator.update(preferred_amount: 92.39)
+      ovpp = @order.line_items.first.personalizations.first.option_value_product_personalization
+      ovpp.calculator.preferred_amount = 92.39
+      # it's easier to remove all but the selected OptionValueProductPersonalization than to calcualte
+      # the postion
+      Spree::OptionValueProductPersonalization.where.not(id: ovpp.id).destroy_all
       expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('92.39'))
     end
   end
