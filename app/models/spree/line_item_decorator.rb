@@ -29,6 +29,10 @@ module Spree
       matching_personalizations_attributes?(personalizations_attributes)
     end
 
+    def personalization_price_has_changed?
+      personalizations.any? { |personalization| personalization.price != personalization.product_personalization_amount }
+    end
+
     private
 
     def ensure_required_personalizations

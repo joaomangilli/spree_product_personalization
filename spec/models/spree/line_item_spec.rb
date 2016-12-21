@@ -34,6 +34,19 @@ describe Spree::LineItem do
     end
   end
 
+  describe '#personalization_price_has_changed?' do
+    it 'returns true if personalization price has changed' do
+      line_item = @order.contents.add(@variant, @quantity, get_params([@personalization_2]))
+      line_item.personalizations.first.price = 77777.77
+      expect(line_item.personalization_price_has_changed?).to eq true
+    end
+
+    it 'returns false if personalization price has not changed' do
+      line_item = @order.contents.add(@variant, @quantity, get_params([@personalization_2]))
+      expect(line_item.personalization_price_has_changed?).to eq false
+    end
+  end
+
   context "#copy_personalizations" do
     context "if the product does not have any personalization" do
       it 'does not copy any personalizations even if personalization is passed' do
