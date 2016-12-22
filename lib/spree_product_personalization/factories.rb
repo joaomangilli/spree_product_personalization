@@ -3,11 +3,11 @@ FactoryGirl.define do
   sequence(:personalization_name) { |n| "Personalization-#{n}" }
   sequence(:personalization_description) { |n| "Description-#{n}" }
 
-  factory :personalization_calculator, :class => Spree::Calculator::FlatRate do
+  factory :personalization_calculator, class: Spree::Calculator::FlatRate do
     preferred_amount { rand(1..100) }
   end
 
-  factory :product_personalization, :class => Spree::ProductPersonalization do
+  factory :product_personalization, class: Spree::ProductPersonalization do
     name { generate(:personalization_name) }
     description { generate(:personalization_description) }
     required false
@@ -16,7 +16,7 @@ FactoryGirl.define do
     calculator { |p| p.association(:personalization_calculator) }
 
     factory :product_personalization_with_option_value do
-      ignore do
+      transient do
         option_value_count 3
       end
       after(:create) do |personalization, evaluator|
@@ -29,14 +29,14 @@ FactoryGirl.define do
     end
   end
 
-  factory :option_value_product_personalization, :class => Spree::OptionValueProductPersonalization do
+  factory :option_value_product_personalization, class: Spree::OptionValueProductPersonalization do
     product_personalization
     option_value
     calculator { |p| p.association(:personalization_calculator) }
   end
 
   factory :product_with_personalizations, parent: :product do
-    ignore do
+    transient do
       personalization_count 3
     end
     after(:create) do |product, evaluator|
@@ -45,7 +45,7 @@ FactoryGirl.define do
   end
 
   factory :product_with_option_value_personalizations, parent: :product do
-    ignore do
+    transient do
       personalization_count 3
     end
     after(:create) do |product, evaluator|
@@ -54,7 +54,7 @@ FactoryGirl.define do
   end
 
   factory :variant_with_personalizations, parent: :variant do
-    ignore do
+    transient do
       personalization_count 3
     end
     after(:create) do |variant, evaluator|

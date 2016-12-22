@@ -1,5 +1,4 @@
 module Spree
-
   Order.class_eval do
 
     def personalizations_match(line_item, other_line_item_or_personalizations_attributes)
@@ -7,6 +6,5 @@ module Spree
     end
 
     self.register_line_item_comparison_hook(:personalizations_match)
-
   end
 end

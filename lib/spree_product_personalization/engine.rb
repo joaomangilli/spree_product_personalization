@@ -11,7 +11,7 @@ module SpreeProductPersonalization
       g.test_framework :rspec
     end
 
-    initializer "spree.personalization.preferences", :before => :load_config_initializers do |app|
+    initializer "spree.personalization.preferences", before: :load_config_initializers do |app|
       Spree::Personalization::Config = Spree::PersonalizationConfiguration.new
     end
 

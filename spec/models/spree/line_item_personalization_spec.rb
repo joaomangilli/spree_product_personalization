@@ -23,7 +23,7 @@ describe Spree::LineItemPersonalization do
 
   def get_params(personalization_attributes)
     options  = { personalizations_attributes: personalization_attributes }
-    ActionController::Parameters.new(options).permit(:personalizations_attributes => Spree::LineItemPersonalization.permitted_attributes)
+    ActionController::Parameters.new(options).permit(personalizations_attributes: Spree::LineItemPersonalization.permitted_attributes)
   end
 
   context "validations" do
@@ -35,25 +35,72 @@ describe Spree::LineItemPersonalization do
       it "should have length greater than 1" do
         @line_item_personalization.value = ""
         @line_item_personalization.name = personalization_name
-        expect(@line_item_personalization.valid?).to be_false
-        expect(@line_item_personalization.errors[:base].first).to eq({personalization_name => "#{personalization_name} is required"})
+        expect(@line_item_personalization.valid?).to eq false
+        expect(@line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is required" })
 
         @line_item_personalization.value = "A"
-        expect(@line_item_personalization.valid?).to be_true
+        expect(@line_item_personalization.valid?).to eq true
       end
 
       it "should have length less than limit" do
         @line_item_personalization.limit = 5
         @line_item_personalization.name = personalization_name
         @line_item_personalization.value = "A long value"
-        expect(@line_item_personalization.valid?).to be_false
-        expect(@line_item_personalization.errors[:base].first).to eq({personalization_name => "#{personalization_name} is too long (maximum is 5 characters)"})
+        expect(@line_item_personalization.valid?).to eq false
+        expect(@line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is too long (maximum is 5 characters)" })
 
         @line_item_personalization.value = "long"
-        expect(@line_item_personalization.valid?).to be_true
+        expect(@line_item_personalization.valid?).to eq true
       end
     end
+  end
 
+
+  describe '#product_personalization_amount' do
+    it 'returns the related ProductPersonalization increase price' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
+      @product_personalizations[0].update(calculator: Spree::Calculator::FlatRate.new(preferred_amount: 78.54))
+      expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('78.54'))
+    end
+
+    it 'returns the related OptionValueProductPersonalization increase price' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
+      ovpp = @order.line_items.first.personalizations.first.option_value_product_personalization
+      ovpp.calculator.preferred_amount = 92.39
+      # it's easier to remove all but the selected OptionValueProductPersonalization than to calcualte
+      # the postion
+      Spree::OptionValueProductPersonalization.where.not(id: ovpp.id).destroy_all
+      expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('92.39'))
+    end
+  end
+
+
+  describe '#has_option_value_personalizations?' do
+    it 'returns true if it has an OptionValueProductPersonalization' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
+      expect(@order.line_items.first.personalizations.first.has_option_value_personalizations?).to eq true
+    end
+
+    it 'returns false if is has no OptionValueProductPersonalization' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
+      expect(@order.line_items.first.personalizations.first.has_option_value_personalizations?).to eq false
+    end
+  end
+
+
+  it 'has relation to product personalization' do
+    @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
+    expect(@order.line_items.first.personalizations.first.product_personalization).to eq(@product_personalizations[0])
+    expect(@order.line_items.first.personalizations.last.product_personalization).to eq(@product_personalizations[3])
+  end
+
+  it 'has relation to option value product personalization' do
+    @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
+    personalization = @order.line_items.first.personalizations
+
+    expect(personalization.first.product_personalization).to eq(@product_personalizations[3])
+    expect(personalization.first.spree_option_value_product_personalization_id).to eq(@select_option_value_product_personalization.id)
+    expect(personalization.first.option_value_product_personalization).to eq(@select_option_value_product_personalization)
   end
 
   it "adds line_item with personalization to the order" do
@@ -67,6 +114,7 @@ describe Spree::LineItemPersonalization do
     expect(line_item.personalizations.first.value).to eq(@personalization_1[:value])
     expect(line_item.personalizations.first.name).to eq(@product_personalizations.first.name)
     expect(line_item.personalizations.first.price).to eq(@product_personalizations.first.calculator.preferred_amount)
+    expect(line_item.personalizations.first.spree_product_personalization_id).to eq(@product_personalizations.first.id)
   end
 
   it "adds line_item of variant that does not have personalization to the order" do
@@ -141,7 +189,7 @@ describe Spree::LineItemPersonalization do
   it "create new line_item when params is in wrong format" do
     old_item = @order.contents.add(@variant, @quantity)
 
-    expect(@order.personalizations_match(old_item, 1)).to be_false
+    expect(@order.personalizations_match(old_item, 1)).to eq false
   end
 
 end
