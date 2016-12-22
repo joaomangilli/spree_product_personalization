@@ -30,7 +30,7 @@ module Spree
     end
 
     def personalization_price_has_changed?
-      personalizations.any? { |personalization| personalization.price != personalization.product_personalization_amount }
+      personalizations.any? { |personalization| personalization.price_has_changed? }
     end
 
     private
