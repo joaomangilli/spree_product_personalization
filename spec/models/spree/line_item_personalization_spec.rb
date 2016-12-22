@@ -108,7 +108,7 @@ describe Spree::LineItemPersonalization do
       expect(line_item_personalization.price_has_changed?).to eq true
     end
 
-    it 'returns false if price does not matches personalization price' do
+    it 'returns false if price does not match personalization price' do
       allow(line_item_personalization).to receive(:product_personalization_amount).and_return(55.55)
       line_item_personalization.price = 55.55
       expect(line_item_personalization.price_has_changed?).to eq false
