@@ -38,12 +38,19 @@ module Spree
       if has_option_value_personalizations?
         option_value_product_personalization.product_personalization_amount
       else
+        return unless product_personalization
         product_personalization.increase_price
       end
     end
 
     def has_option_value_personalizations?
       !option_value_product_personalization.blank?
+    end
+
+    def price_has_changed?
+      return false unless price
+      return false unless product_personalization_amount
+      price != product_personalization_amount
     end
 
 

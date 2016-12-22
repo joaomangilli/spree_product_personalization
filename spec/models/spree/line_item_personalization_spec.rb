@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Spree::LineItemPersonalization do
   let(:personalization_name) { 'Engrave' }
+  let(:line_item_personalization) { Spree::LineItemPersonalization.new }
 
   before do
     @quantity = 2
@@ -28,29 +29,25 @@ describe Spree::LineItemPersonalization do
 
   context "validations" do
     context "#value" do
-      before do
-        @line_item_personalization = Spree::LineItemPersonalization.new
-      end
-
       it "should have length greater than 1" do
-        @line_item_personalization.value = ""
-        @line_item_personalization.name = personalization_name
-        expect(@line_item_personalization.valid?).to eq false
-        expect(@line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is required" })
+        line_item_personalization.value = ""
+        line_item_personalization.name = personalization_name
+        expect(line_item_personalization.valid?).to eq false
+        expect(line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is required" })
 
-        @line_item_personalization.value = "A"
-        expect(@line_item_personalization.valid?).to eq true
+        line_item_personalization.value = "A"
+        expect(line_item_personalization.valid?).to eq true
       end
 
       it "should have length less than limit" do
-        @line_item_personalization.limit = 5
-        @line_item_personalization.name = personalization_name
-        @line_item_personalization.value = "A long value"
-        expect(@line_item_personalization.valid?).to eq false
-        expect(@line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is too long (maximum is 5 characters)" })
+        line_item_personalization.limit = 5
+        line_item_personalization.name = personalization_name
+        line_item_personalization.value = "A long value"
+        expect(line_item_personalization.valid?).to eq false
+        expect(line_item_personalization.errors[:base].first).to eq({ personalization_name => "#{personalization_name} is too long (maximum is 5 characters)" })
 
-        @line_item_personalization.value = "long"
-        expect(@line_item_personalization.valid?).to eq true
+        line_item_personalization.value = "long"
+        expect(line_item_personalization.valid?).to eq true
       end
     end
   end
@@ -61,6 +58,12 @@ describe Spree::LineItemPersonalization do
       @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
       @product_personalizations[0].update(calculator: Spree::Calculator::FlatRate.new(preferred_amount: 78.54))
       expect(@order.line_items.first.personalizations.first.product_personalization_amount).to eq(BigDecimal.new('78.54'))
+    end
+
+    it 'returns nil if no ProductPersonalization exists' do
+      @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
+      @order.line_items.first.personalizations.first.update(spree_product_personalization_id: nil)
+      expect(@order.line_items.first.personalizations.first.product_personalization_amount).to be_nil
     end
 
     it 'returns the related OptionValueProductPersonalization increase price' do
@@ -84,6 +87,31 @@ describe Spree::LineItemPersonalization do
     it 'returns false if is has no OptionValueProductPersonalization' do
       @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
       expect(@order.line_items.first.personalizations.first.has_option_value_personalizations?).to eq false
+    end
+  end
+
+
+  describe '#price_has_changed?' do
+    it 'returns false if no product personalization amount exists' do
+      allow(line_item_personalization).to receive(:product_personalization_amount).and_return(nil)
+      expect(line_item_personalization.price_has_changed?).to eq false
+    end
+
+    it 'returns false if the price is nil' do
+      line_item_personalization.price = nil
+      expect(line_item_personalization.price_has_changed?).to eq false
+    end
+
+    it 'returns true if price matches personalization price' do
+      allow(line_item_personalization).to receive(:product_personalization_amount).and_return(55.55)
+      line_item_personalization.price = 44.44
+      expect(line_item_personalization.price_has_changed?).to eq true
+    end
+
+    it 'returns false if price does not match personalization price' do
+      allow(line_item_personalization).to receive(:product_personalization_amount).and_return(55.55)
+      line_item_personalization.price = 55.55
+      expect(line_item_personalization.price_has_changed?).to eq false
     end
   end
 
