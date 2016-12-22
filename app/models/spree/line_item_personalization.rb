@@ -48,6 +48,7 @@ module Spree
     end
 
     def price_has_changed?
+      return false unless price
       return false unless product_personalization_amount
       price != product_personalization_amount
     end
