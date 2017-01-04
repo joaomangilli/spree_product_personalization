@@ -10,9 +10,15 @@ describe Spree::LineItemPersonalization do
     @product = @variant.product
     @product_personalizations  = @variant.product.personalizations
 
+    variant2 = create(:variant_with_personalizations, price: 67)
+    ppwov = create(:product_personalization_with_option_value)
+    ppwov.product = variant2.product
+    ppwov.save
+
     @product_personalization_with_option_value = create(:product_personalization_with_option_value)
     @product_personalization_with_option_value.product = @product
     @product_personalization_with_option_value.save
+
 
     @select_option_value_product_personalization = @product_personalizations[3].option_value_product_personalizations.sample
 
@@ -123,12 +129,12 @@ describe Spree::LineItemPersonalization do
   end
 
   it 'has relation to option value product personalization' do
-    @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
-    personalization = @order.line_items.first.personalizations
+    @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
+    personalization = @order.line_items.last.personalizations.last
 
-    expect(personalization.first.product_personalization).to eq(@product_personalizations[3])
-    expect(personalization.first.spree_option_value_product_personalization_id).to eq(@select_option_value_product_personalization.id)
-    expect(personalization.first.option_value_product_personalization).to eq(@select_option_value_product_personalization)
+    expect(personalization.product_personalization).to eq(@product_personalizations[3])
+    expect(personalization.spree_option_value_product_personalization_id).to eq(@select_option_value_product_personalization.id)
+    expect(personalization.option_value_product_personalization).to eq(@select_option_value_product_personalization)
   end
 
   it "adds line_item with personalization to the order" do
