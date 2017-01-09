@@ -86,6 +86,8 @@ describe Spree::LineItem do
         expect(line_item.quantity).to eq(@quantity)
         expect(line_item.personalizations.count).to eq 3
 
+        expect(line_item.personalizations.map(&:product_personalization)).to eq [@product_personalizations[0], @product_personalizations[1], @product_personalizations[3]]
+        expect(line_item.personalizations.map(&:option_value_product_personalization)).to eq [nil, nil, @select_option_value_product_personalization]
         expect(line_item.personalizations.map(&:value).uniq).to eq [@personalization_1[:value], @personalization_2[:value], @select_option_value_product_personalization.option_value.name]
         expect(line_item.personalizations.map(&:name).uniq).to eq [@personalization_1[:name], @personalization_2[:name], @personalization_4[:name]]
         expect(line_item.personalizations.map(&:limit).uniq).to eq [45, 67, 200]

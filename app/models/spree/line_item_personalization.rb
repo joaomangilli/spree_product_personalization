@@ -7,7 +7,6 @@ module Spree
     validate :value_length
 
     before_validation { self.value = self.value.try(:strip) }
-    before_save :set_ovpp_id
 
     COMPARISON_KEYS = [:name, :value, :price, :currency]
 
@@ -30,14 +29,7 @@ module Spree
       option_value = Spree::OptionValue.find_by(id: value)
       self.value = option_value.name
       @option_value_id = value
-    end
-
-    def set_ovpp_id
-      pp = line_item.product.personalization_with_name(name)
-      option_value = Spree::OptionValue.find_by(id: option_value_id)
-      return unless option_value && pp.try(:id)
-
-      ovpp = option_value.option_value_product_personalizations.find_by(option_value_id: option_value_id, product_personalization_id: pp.id)
+      ovpp = option_value.option_value_product_personalizations.find_by(option_value_id: value)
       self.spree_option_value_product_personalization_id = ovpp.try(:id)
     end
 

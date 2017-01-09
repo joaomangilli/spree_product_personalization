@@ -10,15 +10,9 @@ describe Spree::LineItemPersonalization do
     @product = @variant.product
     @product_personalizations  = @variant.product.personalizations
 
-    variant2 = create(:variant_with_personalizations, price: 67)
-    ppwov = create(:product_personalization_with_option_value)
-    ppwov.product = variant2.product
-    ppwov.save
-
     @product_personalization_with_option_value = create(:product_personalization_with_option_value)
     @product_personalization_with_option_value.product = @product
     @product_personalization_with_option_value.save
-
 
     @select_option_value_product_personalization = @product_personalizations[3].option_value_product_personalizations.sample
 
@@ -58,7 +52,6 @@ describe Spree::LineItemPersonalization do
     end
   end
 
-
   describe '#product_personalization_amount' do
     it 'returns the related ProductPersonalization increase price' do
       @order.contents.add(@variant, @quantity, get_params([@personalization_1]))
@@ -83,7 +76,6 @@ describe Spree::LineItemPersonalization do
     end
   end
 
-
   describe '#has_option_value_personalizations?' do
     it 'returns true if it has an OptionValueProductPersonalization' do
       @order.contents.add(@variant, @quantity, get_params([@personalization_4]))
@@ -95,7 +87,6 @@ describe Spree::LineItemPersonalization do
       expect(@order.line_items.first.personalizations.first.has_option_value_personalizations?).to eq false
     end
   end
-
 
   describe '#price_has_changed?' do
     it 'returns false if no product personalization amount exists' do
@@ -119,22 +110,6 @@ describe Spree::LineItemPersonalization do
       line_item_personalization.price = 55.55
       expect(line_item_personalization.price_has_changed?).to eq false
     end
-  end
-
-
-  it 'has relation to product personalization' do
-    @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
-    expect(@order.line_items.first.personalizations.first.product_personalization).to eq(@product_personalizations[0])
-    expect(@order.line_items.first.personalizations.last.product_personalization).to eq(@product_personalizations[3])
-  end
-
-  it 'has relation to option value product personalization' do
-    @order.contents.add(@variant, @quantity, get_params([@personalization_1, @personalization_4]))
-    personalization = @order.line_items.last.personalizations.last
-
-    expect(personalization.product_personalization).to eq(@product_personalizations[3])
-    expect(personalization.spree_option_value_product_personalization_id).to eq(@select_option_value_product_personalization.id)
-    expect(personalization.option_value_product_personalization).to eq(@select_option_value_product_personalization)
   end
 
   it "adds line_item with personalization to the order" do
