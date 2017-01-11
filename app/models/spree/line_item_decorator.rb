@@ -56,6 +56,7 @@ module Spree
             if relevant_product_personalization.list?
               option_value_id = line_item_personalization.option_value_id
               option_value_product_personalization = relevant_product_personalization.option_value_product_personalizations.find_by(option_value_id: option_value_id)
+              line_item_personalization.option_value_product_personalization = option_value_product_personalization
               calculator = option_value_product_personalization.try(:calculator)
             else
               calculator = relevant_product_personalization.calculator
@@ -91,7 +92,6 @@ module Spree
 
           personalization_attributes[:price] = calculator.preferred_amount
           personalization_attributes[:currency] = calculator.preferred_currency
-          personalization_attributes[:spree_product_personalization_id] = relevant_product_personalization.id
         end
       end
 

@@ -29,9 +29,6 @@ module Spree
       option_value = Spree::OptionValue.find_by(id: value)
       self.value = option_value.name
       @option_value_id = value
-
-      ovpp = option_value.option_value_product_personalizations.find_by(option_value_id: value)
-      self.spree_option_value_product_personalization_id = ovpp.try(:id)
     end
 
     def product_personalization_amount
