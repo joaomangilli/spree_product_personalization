@@ -92,7 +92,6 @@ module Spree
 
           personalization_attributes[:price] = calculator.preferred_amount
           personalization_attributes[:currency] = calculator.preferred_currency
-          personalization_attributes[:spree_product_personalization_id] = relevant_product_personalization.id
         end
       end
 
