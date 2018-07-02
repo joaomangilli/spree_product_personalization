@@ -176,10 +176,10 @@ describe Spree::ProductPersonalization do
   end
 
   it "return increase price" do
-    personalization = FactoryGirl.create(:product_personalization)
+    personalization = FactoryBot.create(:product_personalization)
     expect(personalization.increase_price).to eq(personalization.calculator.preferred_amount)
 
-    personalization = FactoryGirl.create(:product_personalization_with_option_value)
+    personalization = FactoryBot.create(:product_personalization_with_option_value)
     personalization.option_value_product_personalizations.each_with_index do |o, i|
       expect(personalization.increase_price(i)).to eq(o.calculator.preferred_amount)
     end
