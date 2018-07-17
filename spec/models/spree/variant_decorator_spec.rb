@@ -4,11 +4,11 @@ describe Spree::Variant do
 
   before do
     @quantity = 2
-    @variant = create(:variant_with_personalizations, price: 15)
+    @variant = FactoryBot.create(:variant_with_personalizations, price: 15)
     @product = @variant.product
     @product_personalizations  = @variant.product.personalizations
 
-    @product_personalization_with_option_value = create(:product_personalization_with_option_value)
+    @product_personalization_with_option_value = FactoryBot.create(:product_personalization_with_option_value)
     @product_personalization_with_option_value.product = @product
     @product_personalization_with_option_value.save
 
@@ -17,7 +17,7 @@ describe Spree::Variant do
     @personalization_1 = { name: @product_personalizations[0].name, value: 'Red' }
     @personalization_2 = { name: @product_personalizations[1].name, value: 'Happy Birthday' }
     @personalization_4 = { name: @product_personalizations[3].name, value: 'hi', option_value_id: @select_option_value_product_personalization.option_value_id.to_s }
-    @order = create(:order)
+    @order = FactoryBot.create(:order)
   end
 
   context "#personalizations_attributes_price_modifier_amount_in" do
@@ -56,7 +56,7 @@ describe Spree::Variant do
 
     context "if the product does not have any personalizations" do
       before do
-        @order.contents.add(create(:variant, price: 10), @quantity, { personalizations_attributes: [@personalization_1, @personalization_2] })
+        @order.contents.add(FactoryBot.create(:variant, price: 10), @quantity, { personalizations_attributes: [@personalization_1, @personalization_2] })
       end
 
       it "retains just the price of the product" do

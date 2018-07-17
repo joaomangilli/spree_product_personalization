@@ -4,9 +4,9 @@ describe Spree::Product do
 
   context "duplication" do
 
-    let(:product) { create(:product_with_personalizations) }
+    let(:product) { FactoryBot.create(:product_with_personalizations) }
     let(:source) { product.personalizations }
-    let(:product_with_options) { create(:product_with_option_value_personalizations) }
+    let(:product_with_options) { FactoryBot.create(:product_with_option_value_personalizations) }
     let(:source_with_options) { product_with_options.personalizations }
 
     it 'clones personalization info' do
