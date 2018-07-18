@@ -6,11 +6,11 @@ describe Spree::LineItemPersonalization do
 
   before do
     @quantity = 2
-    @variant = create(:variant_with_personalizations, price: 15)
+    @variant = FactoryBot.create(:variant_with_personalizations, price: 15)
     @product = @variant.product
     @product_personalizations  = @variant.product.personalizations
 
-    @product_personalization_with_option_value = create(:product_personalization_with_option_value)
+    @product_personalization_with_option_value = FactoryBot.create(:product_personalization_with_option_value)
     @product_personalization_with_option_value.product = @product
     @product_personalization_with_option_value.save
 
@@ -19,7 +19,7 @@ describe Spree::LineItemPersonalization do
     @personalization_1 = { name: @product_personalizations[0].name, value: 'Red' }
     @personalization_2 = { name: @product_personalizations[1].name, value: 'Happy Birthday' }
     @personalization_4 = { name: @product_personalizations[3].name, value: 'hi', option_value_id: @select_option_value_product_personalization.option_value_id.to_s }
-    @order = create(:order)
+    @order = FactoryBot.create(:order)
   end
 
   def get_params(personalization_attributes)
@@ -128,7 +128,7 @@ describe Spree::LineItemPersonalization do
 
   it "adds line_item of variant that does not have personalization to the order" do
     original_count = @order.line_items.count
-    line_item = @order.contents.add(create(:variant), @quantity, get_params([@personalization_1]))
+    line_item = @order.contents.add(FactoryBot.create(:variant), @quantity, get_params([@personalization_1]))
     @order.reload
 
     expect(@order.line_items.count).to eq(original_count + 1)
