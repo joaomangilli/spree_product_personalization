@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Spree::OptionValueProductPersonalization do
 
-  let(:product_personalization) { FactoryBot.create(:product_personalization_with_option_value) }
+  let(:product_personalization) { FactoryGirl.create(:product_personalization_with_option_value) }
   let(:option_value_1) { product_personalization.option_values.first }
   let(:option_value_2) { product_personalization.option_values.second }
   let(:personalization) { Spree::OptionValueProductPersonalization.new(product_personalization: product_personalization, position: 1) }
