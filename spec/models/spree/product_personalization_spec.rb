@@ -6,8 +6,8 @@ describe Spree::ProductPersonalization do
   let(:attributes) do
     attrs = []
     count.times { attrs << {
-      name:         FactoryBot.generate(:personalization_name),
-      description:  FactoryBot.generate(:personalization_description),
+      name:         generate(:personalization_name),
+      description:  generate(:personalization_description),
       required:     [true, false].sample,
       limit:        rand(10...1000),
       calculator_attributes: {
@@ -24,7 +24,7 @@ describe Spree::ProductPersonalization do
 
   describe "Validations" do
     before do
-      @target = FactoryBot.build(:product_personalization)
+      @target = build(:product_personalization)
       expect(@target.valid?).to eq true
     end
 
@@ -75,7 +75,7 @@ describe Spree::ProductPersonalization do
         @target.kind = "text"
         expect(@target.valid?).to eq true
         @target.kind = "list"
-        option_value_product_personalization = FactoryBot.build(:option_value_product_personalization, product_personalization: @target)
+        option_value_product_personalization = build(:option_value_product_personalization, product_personalization: @target)
         @target.option_value_product_personalizations << option_value_product_personalization
         expect(@target.valid?).to eq true
       end
@@ -93,7 +93,7 @@ describe Spree::ProductPersonalization do
         end
 
         it 'should be invalid if option values are present' do
-          option_value_product_personalization = FactoryBot.build(:option_value_product_personalization, product_personalization: @target)
+          option_value_product_personalization = build(:option_value_product_personalization, product_personalization: @target)
           @target.option_value_product_personalizations << option_value_product_personalization
           expect(@target.valid?).to eq false
           expect(@target.errors.full_messages.first).to eq "Text personalization cannot have options"
@@ -112,7 +112,7 @@ describe Spree::ProductPersonalization do
         end
 
         it 'should be valid if option values are present' do
-          option_value_product_personalization = FactoryBot.build(:option_value_product_personalization, product_personalization: @target)
+          option_value_product_personalization = build(:option_value_product_personalization, product_personalization: @target)
           @target.option_value_product_personalizations << option_value_product_personalization
           expect(@target.valid?).to eq true
         end
@@ -121,7 +121,7 @@ describe Spree::ProductPersonalization do
   end
 
   it "saves personalization" do
-    product = FactoryBot.build(:product)
+    product = build(:product)
     product.attributes = params
     product.save!
 
@@ -138,7 +138,7 @@ describe Spree::ProductPersonalization do
   end
 
   it "updates personalization" do
-    product = FactoryBot.create(:product_with_personalizations, personalization_count: count)
+    product = create(:product_with_personalizations, personalization_count: count)
     product.personalizations.each_with_index do |t, i|
       s = attributes[i]
       s[:id] = t.id
@@ -158,7 +158,7 @@ describe Spree::ProductPersonalization do
   end
 
   it "allows destroy personalization" do
-    product = FactoryBot.create(:product_with_personalizations, personalization_count: count)
+    product = create(:product_with_personalizations, personalization_count: count)
     product.personalizations.each_with_index do |t, i|
       s = attributes[i]
       s[:id] = t.id
@@ -176,10 +176,10 @@ describe Spree::ProductPersonalization do
   end
 
   it "return increase price" do
-    personalization = FactoryBot.create(:product_personalization)
+    personalization = FactoryGirl.create(:product_personalization)
     expect(personalization.increase_price).to eq(personalization.calculator.preferred_amount)
 
-    personalization = FactoryBot.create(:product_personalization_with_option_value)
+    personalization = FactoryGirl.create(:product_personalization_with_option_value)
     personalization.option_value_product_personalizations.each_with_index do |o, i|
       expect(personalization.increase_price(i)).to eq(o.calculator.preferred_amount)
     end

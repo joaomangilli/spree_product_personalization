@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Spree::Order do
 
   context "#merge!" do
-    let(:variant) { FactoryBot.create(:variant_with_personalizations) }
+    let(:variant) { create(:variant_with_personalizations) }
     let (:product_personalizations) { variant.product.personalizations }
     let (:personalization_1) { { name: product_personalizations[0].name, value: 'Red' } }
     let (:personalization_2) { { name: product_personalizations[1].name, value: 'Happy Birthday' } }
-    let(:order_1) { FactoryBot.create(:order) }
-    let(:order_2) { FactoryBot.create(:order) }
+    let(:order_1) { create(:order) }
+    let(:order_2) { create(:order) }
 
     it "merges together two orders with line items for the same variant and personalization" do
       order_1.contents.add(variant, 1, { personalizations_attributes: [personalization_1, personalization_2] })

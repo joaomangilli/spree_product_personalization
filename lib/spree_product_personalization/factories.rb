@@ -1,4 +1,4 @@
-FactoryBot.define do
+FactoryGirl.define do
 
   sequence(:personalization_name) { |n| "Personalization-#{n}" }
   sequence(:personalization_description) { |n| "Description-#{n}" }
