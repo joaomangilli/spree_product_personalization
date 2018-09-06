@@ -10,14 +10,14 @@ FactoryBot.define do
   factory :product_personalization, class: Spree::ProductPersonalization do
     name { generate(:personalization_name) }
     description { generate(:personalization_description) }
-    required false
-    kind 'text'
-    limit 200
+    required { false }
+    kind { 'text' }
+    limit { 200 }
     calculator { |p| p.association(:personalization_calculator) }
 
     factory :product_personalization_with_option_value do
       transient do
-        option_value_count 3
+        option_value_count { 3 }
       end
       after(:create) do |personalization, evaluator|
         personalization.calculator.preferred_amount = 0
@@ -37,7 +37,7 @@ FactoryBot.define do
 
   factory :product_with_personalizations, parent: :product do
     transient do
-      personalization_count 3
+      personalization_count { 3 }
     end
     after(:create) do |product, evaluator|
       create_list(:product_personalization, evaluator.personalization_count, product: product)
@@ -46,7 +46,7 @@ FactoryBot.define do
 
   factory :product_with_option_value_personalizations, parent: :product do
     transient do
-      personalization_count 3
+      personalization_count { 3 }
     end
     after(:create) do |product, evaluator|
       create_list(:product_personalization_with_option_value, evaluator.personalization_count, product: product)
@@ -55,7 +55,7 @@ FactoryBot.define do
 
   factory :variant_with_personalizations, parent: :variant do
     transient do
-      personalization_count 3
+      personalization_count { 3 }
     end
     after(:create) do |variant, evaluator|
       variant.product = create(:product_with_personalizations, personalization_count: evaluator.personalization_count)
