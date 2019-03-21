@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_product_personalization'
-  s.version     = '2.2.0'
+  s.version     = '3.0.0'
   s.summary     = 'Product Personalization'
   s.description = 'Allow adding personalization to product'
   s.required_ruby_version = '>= 2.1.1'
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 2.2.5'
+  s.add_dependency 'spree_core', '~> 3.0.0'
 
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'database_cleaner'
