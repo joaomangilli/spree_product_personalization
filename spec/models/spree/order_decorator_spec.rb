@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::Order do
+RSpec.describe Spree::Order do
 
   context "#merge!" do
     let(:variant) { FactoryBot.create(:variant_with_personalizations) }

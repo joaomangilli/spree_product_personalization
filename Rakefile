@@ -13,16 +13,9 @@ task :test_app do
   Rake::Task['extension:test_app'].invoke
 end
 
-Rake::Task["spec"].clear
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.fail_on_error = false
-  t.rspec_opts = %w[-f JUnit -o results.xml]
-end
-
 desc "Run RSpec with code coverage"
 task :coverage do
   ENV['COVERAGE'] = 'true'
   Rake::Task["spec"].execute
 end
 task default: :spec
-

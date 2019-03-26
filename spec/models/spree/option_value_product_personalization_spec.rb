@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::OptionValueProductPersonalization do
+RSpec.describe Spree::OptionValueProductPersonalization do
 
   let(:product_personalization) { FactoryBot.create(:product_personalization_with_option_value) }
   let(:option_value_1) { product_personalization.option_values.first }

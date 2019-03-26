@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::Variant do
+RSpec.describe Spree::Variant do
 
   before do
     @quantity = 2

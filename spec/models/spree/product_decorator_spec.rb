@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::Product do
+RSpec.describe Spree::Product do
 
   context "duplication" do
 

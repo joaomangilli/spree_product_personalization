@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::LineItemPersonalization do
+RSpec.describe Spree::LineItemPersonalization do
   let(:personalization_name) { 'Engrave' }
   let(:line_item_personalization) { Spree::LineItemPersonalization.new }
 

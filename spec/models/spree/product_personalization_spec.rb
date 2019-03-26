@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::ProductPersonalization do
+RSpec.describe Spree::ProductPersonalization do
 
   let(:count) { 5 }
   let(:attributes) do
@@ -96,7 +94,7 @@ describe Spree::ProductPersonalization do
           option_value_product_personalization = FactoryBot.build(:option_value_product_personalization, product_personalization: @target)
           @target.option_value_product_personalizations << option_value_product_personalization
           expect(@target.valid?).to eq false
-          expect(@target.errors.full_messages.first).to eq "Text personalization cannot have options"
+          expect(@target.errors.full_messages.first).to include 'en.spree.errors.personalization_text_cannot_have_options'
         end
       end
 
@@ -108,7 +106,7 @@ describe Spree::ProductPersonalization do
         it 'should be invalid if option values are absent' do
           @target.option_value_product_personalizations = []
           expect(@target.valid?).to eq false
-          expect(@target.errors.full_messages.first).to eq "Options personalization should have options"
+          expect(@target.errors.full_messages.first).to include 'en.spree.errors.personalization_options_should_have_options'
         end
 
         it 'should be valid if option values are present' do
@@ -121,7 +119,7 @@ describe Spree::ProductPersonalization do
   end
 
   it "saves personalization" do
-    product = FactoryBot.build(:product)
+    product = FactoryBot.build(:product, shipping_category: FactoryBot.create(:shipping_category))
     product.attributes = params
     product.save!
 

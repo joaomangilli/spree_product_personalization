@@ -17,12 +17,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'spree_core', '~> 3.0.0'
 
-  s.add_development_dependency 'coffee-rails'
-  s.add_development_dependency 'database_cleaner'
-  s.add_development_dependency 'factory_bot', '~> 4.9'
+  s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'rspec-rails',  '~> 2.99'
-  s.add_development_dependency 'sass-rails'
-  s.add_development_dependency 'simplecov'
-  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'simplecov-rcov'
+  s.add_development_dependency 'sqlite3', '~> 1.3.1'
+  s.add_development_dependency 'yarjuf'
+  s.add_development_dependency 'require_all'
 end

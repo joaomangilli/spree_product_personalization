@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Spree::LineItem do
+RSpec.describe Spree::LineItem do
 
   before do
     @quantity = 2
