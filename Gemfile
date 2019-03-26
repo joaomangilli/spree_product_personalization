@@ -9,7 +9,3 @@ group :development, :test do
   gem 'listen'
   gem 'byebug'
 end
-group :development, :test do
-  gem 'guard-rspec'
-  gem 'terminal-notifier-guard'
-end
