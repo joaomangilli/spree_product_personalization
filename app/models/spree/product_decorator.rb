@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   Product.class_eval do
     has_many :personalizations, class_name: "Spree::ProductPersonalization", dependent: :destroy

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   class OptionValueProductPersonalization < ActiveRecord::Base
     include Spree::Core::CalculatedAdjustments

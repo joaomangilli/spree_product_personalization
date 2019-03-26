@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   OptionValue.class_eval do
     has_many :option_value_product_personalizations, dependent: :destroy, inverse_of: :option_value

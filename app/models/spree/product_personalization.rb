@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   class ProductPersonalization < ActiveRecord::Base
     include Spree::Core::CalculatedAdjustments

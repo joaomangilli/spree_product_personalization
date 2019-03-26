@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   class LineItemPersonalization < ActiveRecord::Base
     belongs_to :line_item
