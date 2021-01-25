@@ -3,16 +3,19 @@
 module Spree
   class ProductPersonalization < ActiveRecord::Base
     include Spree::Core::CalculatedAdjustments
+    TEXT_LIMIT = 2000
+    LABEL_LIMIT = 100
+    DESCRIPTION_LIMIT = 200
 
     belongs_to :product
     has_many :option_value_product_personalizations, -> { order(:position) }, class_name: 'Spree::OptionValueProductPersonalization', dependent: :destroy, inverse_of: :product_personalization
     has_many :option_values, class_name: 'Spree::OptionValueProductPersonalization', through: :option_value_product_personalizations
     accepts_nested_attributes_for :option_value_product_personalizations, allow_destroy: true
 
-    validates :name, length: { minimum: 1, maximum: Spree::Personalization::Config[:label_limit] }
+    validates :name, length: { minimum: 1, maximum: LABEL_LIMIT }
     validates :name, uniqueness: { scope: :product_id }
-    validates :description, length: { maximum: Spree::Personalization::Config[:description_limit] }
-    validates :limit, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: Spree::Personalization::Config[:text_limit] }
+    validates :description, length: { maximum: DESCRIPTION_LIMIT }
+    validates :limit, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: TEXT_LIMIT }
     validates :kind, inclusion: { in: %w(text list), message: "%{value} is not a valid type of personalization" }
     validate :check_price
     validate :check_kind
