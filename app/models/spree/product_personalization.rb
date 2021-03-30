@@ -22,7 +22,7 @@ module Spree
 
     before_validation { self.name = self.name.strip if self.name }
 
-    before_save { self.calculator.preferred_currency = Spree::Config[:currency] }
+    # before_save { self.calculator.preferred_currency = Spree::Config[:currency] }
 
     def self.permitted_attributes
       [:id, :name, :description, :kind, :required, :limit, :_destroy, calculator_attributes: [:id, :type, :preferred_amount]]
